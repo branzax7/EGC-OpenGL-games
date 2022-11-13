@@ -42,6 +42,9 @@ void Tema1::Init()
     glm::vec3 corner = glm::vec3(0, 0, 0);
     float squareSide = 100;
 
+    showCollideZone = 0;
+    score = -1;
+
     srand(time(0));
     vitezaCadere = 5;
     vitezaEvadare = 5;
@@ -62,8 +65,10 @@ void Tema1::Init()
     headX = 900;
     headY = 200;
     pasareR = M_PI / 4;
-    tX = 5;
-    tY = 5;
+    tX = speed;
+    tY = speed;
+    cX = headX + 30;
+    cY = headY + 30;
 
     // TODO(student): Compute coordinates of a square's center, and store
     // then in the `cx` and `cy` class variables (see the header). Use
@@ -84,29 +89,29 @@ void Tema1::Init()
     // Initialize angularStep
     angularStep = 0;
 
-    glm::vec3 color = glm::vec3(1, 0, 0);
+    glm::vec3 color = glm::vec3(1, 0, 0); // red green blue
 
    
-    Mesh* square1 = object2D::CreateSquare("square1", corner, squareSide, glm::vec3(1, 0, 0), true);
+    Mesh* square1 = object2D::CreateSquare("square1", corner, 40, glm::vec3(1, 0, 0), true); //
     AddMeshToList(square1);
 
-    Mesh* square2 = object2D::CreateSquare("square2", corner, squareSide, glm::vec3(0, 1, 0));
+    Mesh* square2 = object2D::CreateSquare("square2", corner, squareSide, glm::vec3(0, 1, 0)); // collideZone
     AddMeshToList(square2);
 
-    Mesh* square3 = object2D::CreateSquare("square3", corner, squareSide, glm::vec3(0, 0, 1));
+    Mesh* square3 = object2D::CreateSquare("square3", corner, 40, glm::vec3(0, 0, 1));
     AddMeshToList(square3);
 
-    Mesh* triangle1 = object2D::CreateTriangle("body", corner, triangleSide, glm::vec3(1, 0, 0));
+    Mesh* triangle1 = object2D::CreateTriangle("body", corner, triangleSide, glm::vec3(0.6, 0.1, 0.1));
     AddMeshToList(triangle1);
 
-    Mesh* triangle2 = object2D::CreateTriangle("wing", corner, wingSide, glm::vec3(0, 0, 1));
+    Mesh* triangle2 = object2D::CreateTriangle("wing", corner, wingSide, glm::vec3(0.7, 1, 1));
     AddMeshToList(triangle2);
 
     Mesh* triangle3 = object2D::CreateTriangle("cioc", corner, 10, glm::vec3(1, 0.5f, 0));
     AddMeshToList(triangle3);
 
 
-    Mesh* circle1 = object2D::CreateCircle("head", corner, 100, glm::vec3(1, 1, 0));
+    Mesh* circle1 = object2D::CreateCircle("head", corner, 100, glm::vec3(0, 0.5, 0));
     AddMeshToList(circle1);
 
     Mesh* circle2 = object2D::CreateCircle("life", corner, 100, glm::vec3(1, 0, 0));
@@ -155,6 +160,11 @@ void Tema1::Update(float deltaTimeSeconds)
             speedCounter++;
             speed = speed + speedCounter * speed / 5;
         }
+        if (lives == 0)
+            exit(1);
+        
+        if (gameplay == 2)
+            score++;
         
         //trebuie cu random
         headX = rand() % 1100 + 100;
@@ -181,7 +191,8 @@ void Tema1::Update(float deltaTimeSeconds)
     if (gameplay == 0) {
         if (tY > 0) {
             if (tX > 0) { //dreapta
-                if (timeElapsed >= 5 || bullets == 0) { //evadare
+                collideCase = 1;
+                if (timeElapsed >= 5 || (bullets == 0 && shot == 0)) { //evadare
                     pasareR += M_PI / 4;
                     tX = 0;
                     tY = vitezaEvadare;
@@ -209,7 +220,8 @@ void Tema1::Update(float deltaTimeSeconds)
             }
 
             if (tX < 0) { //stanga
-                if (timeElapsed >= 5 || bullets == 0) { //evadare
+                collideCase = 2;
+                if (timeElapsed >= 5 || (bullets == 0 && shot == 0)) { //evadare
                     pasareR -= M_PI / 4;
                     tX = 0;
                     tY = vitezaEvadare;
@@ -239,7 +251,8 @@ void Tema1::Update(float deltaTimeSeconds)
         //jos
         if (tY < 0) {
             if (tX > 0) { //dreapta
-                if (timeElapsed >= 5 || bullets == 0) {
+                collideCase = 3;
+                if (timeElapsed >= 5 || (bullets == 0 && shot == 0)) {
                     pasareR += 3 * M_PI / 4;
                     tX = 0;
                     //tY *= -1;
@@ -266,7 +279,15 @@ void Tema1::Update(float deltaTimeSeconds)
             }
 
             if (tX < 0) { //stanga
-                if (timeElapsed < 5 && shot == 0) {
+                collideCase = 4;
+                if (timeElapsed >= 5 || (bullets == 0 && shot == 0)) {
+                    pasareR -= 3 * M_PI / 4;
+                    tX = 0;
+                    //tY *= -1;
+                    tY = vitezaEvadare;
+                    gameplay = 1;
+                }
+                else if (timeElapsed < 5 && shot == 0) {
                     if (headX <= 0) { //perete stang
                         pasareR += M_PI / 2; //pozitionare
                         tX *= -1; // shimbare directie
@@ -282,13 +303,6 @@ void Tema1::Update(float deltaTimeSeconds)
                     tX = 0;
                     tY = -vitezaCadere;
                     gameplay = 2;
-                }
-                else {
-                    pasareR -= 3 * M_PI / 4;
-                    tX = 0;
-                    //tY *= -1;
-                    tY = vitezaEvadare;
-                    gameplay = 1;
                 }
             }
         }
@@ -323,6 +337,27 @@ void Tema1::Update(float deltaTimeSeconds)
     //miscare continua
     headX += tX;
     headY += tY;
+
+    //scor 4o l
+    modelMatrix = glm::mat3(1);
+    modelMatrix *= transform2D::Translate(900, 615);
+    modelAux = modelMatrix;
+    modelMatrix *= transform2D::Scale(6, 1);
+    RenderMesh2D(meshes["square3"], shaders["VertexColor"], modelMatrix);
+
+    modelMatrix = modelAux;
+    modelMatrix *= transform2D::Scale(0.25, 1); // 20 0.5 // 10 0.25
+    if (score > 23)
+        score = 23;
+    for (int i = 0; i <= score; i++) {
+        modelMatrix = modelAux;
+        modelMatrix *= transform2D::Translate(10*i, 0);
+        modelMatrix *= transform2D::Scale(0.25, 1);
+        RenderMesh2D(meshes["square1"], shaders["VertexColor"], modelMatrix);
+    }
+    
+   
+
 
     //vieti
     modelMatrix = glm::mat3(1);
@@ -365,11 +400,37 @@ void Tema1::Update(float deltaTimeSeconds)
     RenderMesh2D(meshes["head"], shaders["VertexColor"], modelMatrix);
     modelMatrix = modelAux;
     //!!!!!!!!!!!!!!! fac dreptunch care acopera rata si nus se roteste odata cu rata, dar isi schimba poz dupa rotatie sa poata incadra mai bine rata => f. simplu
-    modelMatrix *= transform2D::Translate(40, 50);
-    modelMatrix *= transform2D::Scale(2, 1.2);
-    modelMatrix *= transform2D::Translate(-100, -100);
-
-    //RenderMesh2D(meshes["square1"], shaders["VertexColor"], modelMatrix);  //rectangle coliziune din patrat scalat cu latura 100
+    modelMatrix = glm::mat3(1);
+    
+    switch (collideCase)
+    {
+    case 1:
+        cX = headX + 30;
+        cY = headY + 30;
+        break;
+    case 2:
+        cX = headX + 30 + 70;
+        cY = headY + 30;
+        break;
+    case 3:
+        cX = headX + 30;
+        cY = headY + 30 + 70;
+        break;
+    case 4:
+        cX = headX + 30 + 70;
+        cY = headY + 30 + 70;
+        break;
+    default:
+        break;
+    }
+    modelMatrix *= transform2D::Translate(cX, cY);  //(headx + 30 + 70 ,heady + 30)pt x = -1, y = 1
+    modelMatrix *= transform2D::Scale(1.4, 1.4);                   //(headx + 30 ,heady + 30)pt x = 1, y = 1
+    modelMatrix *= transform2D::Translate(-100, -100);             //(headx + 30 + 70 ,heady + 30 + 70)pt x = -1, y = -1
+    //modelMatrix *= transform2D::Translate(40, 50);                //(headx + 30 ,heady + 30 + 70)pt x = 1, y = -1
+    //modelMatrix *= transform2D::Scale(2, 1.2);
+    //modelMatrix *= transform2D::Translate(-100, -100);
+    if (showCollideZone && gameplay == 0)
+        RenderMesh2D(meshes["square2"], shaders["VertexColor"], modelMatrix);  //rectangle coliziune din patrat scalat cu latura 100
 
     //modelMatrix = glm::mat3(1);
     //modelMatrix *= transform2D::Translate(-70, -60);
@@ -442,6 +503,14 @@ void Tema1::OnInputUpdate(float deltaTime, int mods)
 void Tema1::OnKeyPress(int key, int mods)
 {
     // Add key press event
+    if (key == GLFW_KEY_F) {
+        // TODO(student): Change the values of the color components.
+        if (showCollideZone)
+            showCollideZone = 0;
+        else
+            showCollideZone = 1;
+
+    }
 }
 
 
@@ -464,17 +533,17 @@ void Tema1::OnMouseBtnPress(int mouseX, int mouseY, int button, int mods)
     mouseY2 = 720 - mouseY;
     cout << "MouseX: " << mouseX << endl;
     cout << "MouseY: " << mouseY2 << endl;
-    /*cout << rectX11 << " " << rectX2 << " " << rectY11 << " " << rectY << ": ";
-    if (mouseX > rectX11 && mouseX < rectX2 && mouseY2 > rectY11 && mouseY2 < rectY) {
-        cout << "DAAAAAAAAAAAA" << endl;
-    }
-    else
-        cout << "NUUUUUUUUUUUU" << endl;*/
 
-    if (mouseX > 640 && shot == 0) {
+    /*if (mouseX > 640 && shot == 0) {
+        shot = 1;
+        bullets--;
+    }*/
+   
+    if (mouseX >= cX - 100 * 1.4 && mouseX <= cX && mouseY2 >= cY - 100 * 1.4 && mouseY2 <= cY) {
         shot = 1;
         bullets--;
     }
+ 
     if (shot == 0)
         bullets--;
 
