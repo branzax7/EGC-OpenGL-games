@@ -53,6 +53,9 @@ namespace m1
         int poz;
         float vitezaCadere, vitezaEvadare;
         int bullets;
+        int collideCase, cX, cY;
+        int showCollideZone;
+        int score;
         // TODO(student): If you need any other class variables, define them here.
 
     };
