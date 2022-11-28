@@ -29,6 +29,11 @@ void Tema2::Init()
     renderCameraTarget = false;
     viewFlag = 0;
     zoom = 60;
+    glm::vec3 roadColor = glm::vec3(0.14, 0.15, 0.14);
+    glm::vec3 grassColor = glm::vec3(0, 1, 0);
+    glm::vec3 trunkColor = glm::vec3(0.13, 0.12, 0.09);
+    glm::vec3 leavesColor = glm::vec3(0.15, 0.27, 0.15);
+
 
     camera = new implemented::Camera2();
     camera->Set(glm::vec3(0, 2, 3.5f), glm::vec3(0, 1, 0), glm::vec3(0, 1, 0));
@@ -51,42 +56,42 @@ void Tema2::Init()
     {
         vector<VertexFormat> vertices // patrat
         {
-            VertexFormat(glm::vec3(4.61, 0, -1.5), glm::vec3(0, 1, 1)), //R1 //---0---
-            VertexFormat(glm::vec3(3.34, 0, -1.6), glm::vec3(0, 1, 1)), //Q1
-            VertexFormat(glm::vec3(2.46, 0, -1.01), glm::vec3(0, 1, 1)), //P1
-            VertexFormat(glm::vec3(1.54, 0, -0.42), glm::vec3(0, 1, 1)), //O1
-            VertexFormat(glm::vec3(0.57, 0, -1.2), glm::vec3(0, 1, 1)), //N1
-            VertexFormat(glm::vec3(-0.69, 0, -1.91), glm::vec3(0, 1, 1)), //M1
-            VertexFormat(glm::vec3(-2.21, 0, -1.82), glm::vec3(0, 1, 1)), //L1
-            VertexFormat(glm::vec3(-3.62, 0, -1.15), glm::vec3(0, 1, 1)), //K1
-            VertexFormat(glm::vec3(-4.13, 0, -0.16), glm::vec3(0, 1, 1)), //J1
-            VertexFormat(glm::vec3(-3.85, 0, 0.91), glm::vec3(0, 1, 1)), //I1
-            VertexFormat(glm::vec3(-2.77, 0, 1.64), glm::vec3(0, 1, 1)), //H1
-            VertexFormat(glm::vec3(-1.65, 0, 1.41), glm::vec3(0, 1, 1)), //G1
-            VertexFormat(glm::vec3(-0.61, 0, 0.81), glm::vec3(0, 1, 1)), //F1
-            VertexFormat(glm::vec3(0.45, 0, 1.43), glm::vec3(0, 1, 1)), //E1
-            VertexFormat(glm::vec3(1.46, 0, 2.21), glm::vec3(0, 1, 1)), //D1
-            VertexFormat(glm::vec3(2.94, 0, 2.42), glm::vec3(0, 1, 1)), //C1
-            VertexFormat(glm::vec3(4.43, 0, 1.53), glm::vec3(0, 1, 1)), //B1
-            VertexFormat(glm::vec3(5.17, 0, 0.23), glm::vec3(0, 1, 1)), //A1 //---17---
-            VertexFormat(glm::vec3(4.7, 0, 0.32), glm::vec3(0, 1, 1)), //A2   //18
-            VertexFormat(glm::vec3(4.1, 0, 1.34), glm::vec3(0, 1, 1)), //B2
-            VertexFormat(glm::vec3(2.72, 0, 2), glm::vec3(0, 1, 1)), //C2
-            VertexFormat(glm::vec3(1.52, 0, 1.82), glm::vec3(0, 1, 1)), //D2
-            VertexFormat(glm::vec3(0.66, 0, 1.16), glm::vec3(0, 1, 1)), //E2
-            VertexFormat(glm::vec3(-0.42, 0, 0.49), glm::vec3(0, 1, 1)), //F2
-            VertexFormat(glm::vec3(-1.82, 0, 1.02), glm::vec3(0, 1, 1)), //G2
-            VertexFormat(glm::vec3(-2.86, 0, 1.32), glm::vec3(0, 1, 1)), //H2
-            VertexFormat(glm::vec3(-3.67, 0, -0.62), glm::vec3(0, 1, 1)), //I2
-            VertexFormat(glm::vec3(-3.83, 0, -0.2), glm::vec3(0, 1, 1)), //J2
-            VertexFormat(glm::vec3(-3.36, 0, -1), glm::vec3(0, 1, 1)), //K2
-            VertexFormat(glm::vec3(-2.06, 0, -1.42), glm::vec3(0, 1, 1)), //L2
-            VertexFormat(glm::vec3(-0.67, 0, -1.48), glm::vec3(0, 1, 1)), //M2
-            VertexFormat(glm::vec3(0.38, 0, -0.87), glm::vec3(0, 1, 1)), //N2
-            VertexFormat(glm::vec3(1.32, 0, -0.13), glm::vec3(0, 1, 1)), //O2
-            VertexFormat(glm::vec3(2.63, 0, -0.65), glm::vec3(0, 1, 1)), //P2
-            VertexFormat(glm::vec3(3.53, 0, -1.33), glm::vec3(0, 1, 1)), //Q2
-            VertexFormat(glm::vec3(4.56, 0, -1.16), glm::vec3(0, 1, 1)), //R2 //35
+            VertexFormat(glm::vec3(4.61, 0, -1.5), roadColor), //R1 //---0---
+            VertexFormat(glm::vec3(3.34, 0, -1.6), roadColor), //Q1
+            VertexFormat(glm::vec3(2.46, 0, -1.01), roadColor), //P1
+            VertexFormat(glm::vec3(1.54, 0, -0.42), roadColor), //O1
+            VertexFormat(glm::vec3(0.57, 0, -1.2), roadColor), //N1
+            VertexFormat(glm::vec3(-0.69, 0, -1.91), roadColor), //M1
+            VertexFormat(glm::vec3(-2.21, 0, -1.82), roadColor), //L1
+            VertexFormat(glm::vec3(-3.62, 0, -1.15), roadColor), //K1
+            VertexFormat(glm::vec3(-4.13, 0, -0.16), roadColor), //J1
+            VertexFormat(glm::vec3(-3.85, 0, 0.91), roadColor), //I1
+            VertexFormat(glm::vec3(-2.77, 0, 1.64), roadColor), //H1
+            VertexFormat(glm::vec3(-1.65, 0, 1.41), roadColor), //G1
+            VertexFormat(glm::vec3(-0.61, 0, 0.81), roadColor), //F1
+            VertexFormat(glm::vec3(0.45, 0, 1.43), roadColor), //E1
+            VertexFormat(glm::vec3(1.46, 0, 2.21), roadColor), //D1
+            VertexFormat(glm::vec3(2.94, 0, 2.42), roadColor), //C1
+            VertexFormat(glm::vec3(4.43, 0, 1.53), roadColor), //B1
+            VertexFormat(glm::vec3(5.17, 0, 0.23), roadColor), //A1 //---17---
+            VertexFormat(glm::vec3(4.7, 0, 0.32), roadColor), //A2   //18
+            VertexFormat(glm::vec3(4.1, 0, 1.34),roadColor), //B2
+            VertexFormat(glm::vec3(2.72, 0, 2), roadColor), //C2
+            VertexFormat(glm::vec3(1.52, 0, 1.82), roadColor), //D2
+            VertexFormat(glm::vec3(0.66, 0, 1.16), roadColor), //E2
+            VertexFormat(glm::vec3(-0.42, 0, 0.49), roadColor), //F2
+            VertexFormat(glm::vec3(-1.82, 0, 1.02), roadColor), //G2
+            VertexFormat(glm::vec3(-2.86, 0, 1.32), roadColor), //H2
+            VertexFormat(glm::vec3(-3.67, 0, -0.62), roadColor), //I2
+            VertexFormat(glm::vec3(-3.83, 0, -0.2), roadColor), //J2
+            VertexFormat(glm::vec3(-3.36, 0, -1), roadColor), //K2
+            VertexFormat(glm::vec3(-2.06, 0, -1.42), roadColor), //L2
+            VertexFormat(glm::vec3(-0.67, 0, -1.48), roadColor), //M2
+            VertexFormat(glm::vec3(0.38, 0, -0.87), roadColor), //N2
+            VertexFormat(glm::vec3(1.32, 0, -0.13), roadColor), //O2
+            VertexFormat(glm::vec3(2.63, 0, -0.65), roadColor), //P2
+            VertexFormat(glm::vec3(3.53, 0, -1.33), roadColor), //Q2
+            VertexFormat(glm::vec3(4.56, 0, -1.16), roadColor), //R2 //35
             
         };
         // (R2, R1, A1), (R2, A1, A2) R->A
@@ -126,6 +131,110 @@ void Tema2::Init()
         AddMeshToList(pista);
 
     }
+
+    {
+        vector<VertexFormat> vertices2 // patrat
+        {
+            VertexFormat(glm::vec3(-1, -0.001, -1), grassColor), //R1 //---0---
+            VertexFormat(glm::vec3(-1,  -0.001, 1), grassColor), //R1 //---0---
+            VertexFormat(glm::vec3(1,  -0.001, 1), grassColor), //R1 //---0---
+            VertexFormat(glm::vec3(1,  -0.001, -1), grassColor), //R1 //---0
+            //glm::vec3(0, 1, 0)
+            //glm::vec3(0.14, 0.15, 0.14)
+        };
+
+        vector<unsigned int> indices2 = {0, 1, 2, 0, 2, 3};
+
+        Mesh* grass = new Mesh("iarba");
+        grass->InitFromData(vertices2, indices2);
+        AddMeshToList(grass);
+
+    }
+
+    {
+        vector<VertexFormat> vertices3
+        {
+            //VertexFormat(glm::vec3(-1, -1,  1), glm::vec3(0, 1, 1), glm::vec3(0.2, 0.8, 0.6)),// fara normala acm
+            VertexFormat(glm::vec3(0, 0,  1), trunkColor), //0
+            // TODO(student): Complete the vertices data for the cube mesh
+            VertexFormat(glm::vec3(1, 0, 1), trunkColor), //1
+            VertexFormat(glm::vec3(0, 1,  1), trunkColor), //2
+            VertexFormat(glm::vec3(1, 1, 1), trunkColor), //3
+            VertexFormat(glm::vec3(0, 0,  0), trunkColor), //4
+            VertexFormat(glm::vec3(1, 0,  0), trunkColor), // 5
+            VertexFormat(glm::vec3(0, 1,  0), trunkColor), //6
+            VertexFormat(glm::vec3(1, 1,  0), trunkColor), //7
+
+
+        };
+
+        vector<unsigned int> indices3 =
+        {
+            0, 1, 2,    // indices for first triangle
+            1, 3, 2,    // indices for second triangle
+            // TODO(student): Complete indices data for the cube mesh
+            2, 3, 7,
+            2, 7, 6,
+            1, 7, 3,
+            1, 5, 7,
+            6, 7, 4,
+            7, 5, 4,
+            0, 4, 1,
+            1, 4, 5,
+            2, 6, 4,
+            0, 2, 4
+
+
+
+        };
+
+        Mesh* trunk = new Mesh("trunchi");
+        trunk->InitFromData(vertices3, indices3);
+        AddMeshToList(trunk);
+    }
+
+
+    {
+        vector<VertexFormat> vertices4
+        {
+            //VertexFormat(glm::vec3(-1, -1,  1), glm::vec3(0, 1, 1), glm::vec3(0.2, 0.8, 0.6)),// fara normala acm
+            VertexFormat(glm::vec3(0, 0,  1), leavesColor), //0
+            // TODO(student): Complete the vertices data for the cube mesh
+            VertexFormat(glm::vec3(1, 0, 1), leavesColor), //1
+            VertexFormat(glm::vec3(0, 1,  1), leavesColor), //2
+            VertexFormat(glm::vec3(1, 1, 1), leavesColor), //3
+            VertexFormat(glm::vec3(0, 0,  0), leavesColor), //4
+            VertexFormat(glm::vec3(1, 0,  0), leavesColor), // 5
+            VertexFormat(glm::vec3(0, 1,  0), leavesColor), //6
+            VertexFormat(glm::vec3(1, 1,  0), leavesColor), //7
+
+
+        };
+
+        vector<unsigned int> indices4 =
+        {
+            0, 1, 2,    // indices for first triangle
+            1, 3, 2,    // indices for second triangle
+            // TODO(student): Complete indices data for the cube mesh
+            2, 3, 7,
+            2, 7, 6,
+            1, 7, 3,
+            1, 5, 7,
+            6, 7, 4,
+            7, 5, 4,
+            0, 4, 1,
+            1, 4, 5,
+            2, 6, 4,
+            0, 2, 4
+
+
+
+        };
+
+        Mesh* leaves = new Mesh("frunze");
+        leaves->InitFromData(vertices4, indices4);
+        AddMeshToList(leaves);
+    }
     
 
 }
@@ -146,9 +255,19 @@ void Tema2::FrameStart()
 void Tema2::Update(float deltaTimeSeconds)
 {
    
-
-    
     glm::mat4 modelMatrix = glm::mat4(1);
+    //modelMatrix = glm::translate(modelMatrix, glm::vec3(0, 0, 1.2));
+    RenderMesh(meshes["trunchi"], shaders["VertexColor"], modelMatrix);
+
+    modelMatrix = glm::mat4(1);
+    modelMatrix = glm::translate(modelMatrix, glm::vec3(0, 1, 0));
+    RenderMesh(meshes["frunze"], shaders["VertexColor"], modelMatrix);
+
+    modelMatrix = glm::mat4(1);
+    modelMatrix = glm::scale(modelMatrix, glm::vec3(16, 16, 16));
+    RenderMesh(meshes["iarba"], shaders["VertexColor"], modelMatrix);
+    
+    modelMatrix = glm::mat4(1);
     modelMatrix = glm::scale(modelMatrix, glm::vec3(3, 3, 3));
     RenderMesh(meshes["pista"], shaders["VertexColor"],modelMatrix);
     
