@@ -32,7 +32,7 @@ void main()
     vec3 L = normalize( light_position - world_pos );
     vec3 V = normalize( eye_position - world_pos );
     vec3 H = normalize( L + V );
-    vec3 R = normalize(reflect(L, world_normal));
+    vec3 R = normalize(reflect(-L, world_normal));
 
     // TODO(student): Define ambient light component
     float ambient_light = material_kd * 0.25;
