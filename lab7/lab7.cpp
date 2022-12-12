@@ -147,10 +147,10 @@ void Lab7::RenderSimpleMesh(Mesh *mesh, Shader *shader, const glm::mat4 & modelM
     glUniform1f(locationKd, materialKd);
 
     GLfloat locationKs = glGetUniformLocation(shader->program, "material_ks");
-    glUniform1f(locationKd, materialKs);
+    glUniform1f(locationKs, materialKs);
 
     GLint locationShine = glGetUniformLocation(shader->program, "material_shininess");
-    glUniform1i(locationKd, materialShininess);
+    glUniform1i(locationShine, materialShininess);
     
     //glm::vec3 Lc = glm(0.25, 0.25, 0.25);
     GLint locationColor = glGetUniformLocation(shader->program, "object_color");
