@@ -61,6 +61,8 @@ void Lab8::Init()
         lightPosition = glm::vec3(0, 1, 1);
         lightPosition2 = glm::vec3(0.5f, 1, 1);
         lightDirection = glm::vec3(0, -1, 0);
+        lightDirection2 = glm::vec3(0, -1, 0);
+
         materialShininess = 30;
         materialKd = 0.5;
         materialKs = 0.5;
@@ -68,15 +70,7 @@ void Lab8::Init()
         cutOffAngle = RADIANS(30);
         spotLight = 0;
         
-        light_sources[0].color = glm::vec3(0, 0, 0);
-        light_sources[0].direction = glm::vec3(0, -1, 0);
-        light_sources[0].type = 1;
-        light_sources[0].position = glm::vec3(0, 1, 1);
-
-        light_sources[1].color = glm::vec3(0, 0, 0);
-        light_sources[1].direction = glm::vec3(0, -1, 0);
-        light_sources[1].type = 1;
-        light_sources[1].position = glm::vec3(0.5f, 1, 1);
+       
     }
 }
 
@@ -165,24 +159,7 @@ void Lab8::RenderSimpleMesh(Mesh *mesh, Shader *shader, const glm::mat4 & modelM
 
     // Set shader uniforms for light properties
     
-    for (int i = 0; i < 2; ++i)
-    {
-        std::string name = std::string("lights[") + std::to_string(i) + std::string("].position");
-        GLuint location = glGetUniformLocation(shader->program, name.c_str());
-        glUniform3fv(location, 1, glm::value_ptr(light_sources[i].position));
-
-        name = std::string("lights[") + std::to_string(i) + std::string("].direction");
-        location = glGetUniformLocation(shader->program, name.c_str());
-        glUniform3fv(location, 1, glm::value_ptr(light_sources[i].direction));
-
-        name = std::string("lights[") + std::to_string(i) + std::string("].color");
-        location = glGetUniformLocation(shader->program, name.c_str());
-        glUniform3fv(location, 1, glm::value_ptr(light_sources[i].color));
-
-        name = std::string("lights[") + std::to_string(i) + std::string("].type");
-        location = glGetUniformLocation(shader->program, name.c_str());
-        glUniform1i(location, light_sources[i].type);
-    }
+    
 
 
     int light_position = glGetUniformLocation(shader->program, "light_position");
@@ -190,6 +167,12 @@ void Lab8::RenderSimpleMesh(Mesh *mesh, Shader *shader, const glm::mat4 & modelM
 
     int light_direction = glGetUniformLocation(shader->program, "light_direction");
     glUniform3f(light_direction, lightDirection.x, lightDirection.y, lightDirection.z);
+
+    light_position = glGetUniformLocation(shader->program, "light_position2");
+    glUniform3f(light_position, lightPosition2.x, lightPosition2.y, lightPosition2.z);
+
+    light_direction = glGetUniformLocation(shader->program, "light_direction2");
+    glUniform3f(light_direction, lightDirection2.x, lightDirection2.y, lightDirection2.z);
 
     // Set eye position (camera position) uniform
     glm::vec3 eyePosition = GetSceneCamera()->m_transform->GetWorldPosition();
