@@ -1,21 +1,15 @@
 #version 330
 
-
-struct light_source
-{
-   int  type;
-   vec3 position;
-   vec3 color;
-   vec3 direction;
-};
-
 // Input
 in vec3 world_position;
 in vec3 world_normal;
 
 // Uniforms for light properties
-//uniform vec3 light_direction;
-//uniform vec3 light_position;
+uniform vec3 light_direction;
+uniform vec3 light_position;
+uniform vec3 light_direction2;
+uniform vec3 light_position2;
+
 uniform vec3 eye_position;
 
 uniform float material_kd;
@@ -26,17 +20,15 @@ uniform int material_shininess;
 uniform int is_spot_light;
 uniform float cut_off;
 
-uniform light_source lights[2];
-
 
 uniform vec3 object_color;
 
 // Output
 layout(location = 0) out vec4 out_color;
 
-vec3 point_light_contribution(vec3 light_position, vec3 light_color, vec3 light_direction, int type)
-{
-	// TODO(student): Define ambient, diffuse and specular light components
+
+vec3 get_color(vec3 light_direction, vec3 light_position){
+// TODO(student): Define ambient, diffuse and specular light components
     vec3 L = normalize( light_position - world_position );
     vec3 V = normalize( eye_position - world_position );
     vec3 H = normalize( L + V );
@@ -62,8 +54,8 @@ vec3 point_light_contribution(vec3 light_position, vec3 light_color, vec3 light_
 
     float dist = distance (light_position, world_position);
     float light_att_factor = 1.0 / pow((dist + 1), 2);
-    if (type == 1) { //tpye sau is_spot_light
-        if (type > cos(cut_off))
+    if (is_spot_light == 1) {
+        if (spot_light > cos(cut_off))
         {
 	        // fragmentul este iluminat de spot, deci se calculeaza valoarea luminii conform  modelului Phong
 	        // se calculeaza atenuarea luminii
@@ -81,7 +73,8 @@ vec3 point_light_contribution(vec3 light_position, vec3 light_color, vec3 light_
     // together, but if you're feeling extra fancy, you can add individual
     // colors to the light components. To do that, pick some vec3 colors that
     // you like, and multiply them with the respective light components.
-    
+    //float dist = distance (light_position, world_position);
+    //float att_factor = 1.0 / pow((dist + 1), 2);
     float light = ambient_light + 0 + light_att_factor * (diffuse_light + specular_light);
 
 
@@ -90,11 +83,13 @@ vec3 point_light_contribution(vec3 light_position, vec3 light_color, vec3 light_
     return color;
 }
 
+
 void main()
 {
-   
-    vec3 color = point_light_contribution(lights[0].position, lights[0].color, lights[0].direction, lights[0].type);
-    //vec3 color;
-    out_color = vec4(color, 1);
+    
+    vec3 color1 = get_color(light_direction, light_position);
+    vec3 color2 = get_color(light_direction2, light_position2);
+
+    out_color = vec4(color2 + color1, 1);
 
 }
